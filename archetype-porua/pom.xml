@@ -20,6 +20,11 @@
 		</dependency>
 	</dependencies>
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/app</directory>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -45,19 +50,6 @@
 							</descriptorRefs>
 							<finalName>${project.artifactId}-${project.version}</finalName>
 							<appendAssemblyId>false</appendAssemblyId>
-						</configuration>
-					</execution>
-					<execution>
-						<id>zip-all</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-						<configuration>
-							<descriptors>
-								<descriptor>src/assembly/assembly.xml</descriptor>
-							</descriptors>
-							<finalName>${project.artifactId}-${project.version}</finalName>
 						</configuration>
 					</execution>
 				</executions>
