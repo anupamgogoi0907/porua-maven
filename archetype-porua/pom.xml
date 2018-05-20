@@ -48,7 +48,8 @@
 							<descriptorRefs>
 								<descriptorRef>jar-with-dependencies</descriptorRef>
 							</descriptorRefs>
-							<finalName>${project.artifactId}-${project.version}</finalName>
+							<finalName>app-${project.artifactId}-${project.version}</finalName>
+							<outputDirectory>./</outputDirectory>
 							<appendAssemblyId>false</appendAssemblyId>
 						</configuration>
 					</execution>
