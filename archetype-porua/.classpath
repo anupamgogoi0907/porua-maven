@@ -28,7 +28,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="var" path="M2_REPO/com/porua/porua-container/1.0.0/porua-container-1.0.0.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/porua/porua-container/1.0.0/porua-container-1.0.0.jar" sourcepath="/PORUA"/>
 	<classpathentry kind="var" path="M2_REPO/com/porua/porua-core/1.0.0/porua-core-1.0.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/springframework/spring-core/5.0.6.RELEASE/spring-core-5.0.6.RELEASE.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/springframework/spring-jcl/5.0.6.RELEASE/spring-jcl-5.0.6.RELEASE.jar"/>
