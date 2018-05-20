@@ -6,7 +6,7 @@ package runner;
 public class AppRunner {
 
 	public static void main(String[] a) throws Exception {
-		// ${package}.container.PoruaContainer.scanSingleApp();
+		// PoruaContainer.scanSingleApp();
 	}
 
 }
