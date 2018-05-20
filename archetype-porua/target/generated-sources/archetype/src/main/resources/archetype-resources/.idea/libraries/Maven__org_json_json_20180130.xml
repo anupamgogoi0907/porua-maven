@@ -1,0 +1,16 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<component name="libraryTable">
+  <library name="Maven: org.json:json:20180130">
+    <CLASSES>
+      <root url="jar://${symbol_dollar}MAVEN_REPOSITORY${symbol_dollar}/org/json/json/20180130/json-20180130.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://${symbol_dollar}MAVEN_REPOSITORY${symbol_dollar}/org/json/json/20180130/json-20180130-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://${symbol_dollar}MAVEN_REPOSITORY${symbol_dollar}/org/json/json/20180130/json-20180130-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
