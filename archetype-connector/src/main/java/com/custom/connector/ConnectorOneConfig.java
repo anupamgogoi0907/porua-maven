@@ -2,6 +2,7 @@ package com.custom.connector;
 
 public class ConnectorOneConfig {
 
+	private String name;
 	private String host;
 	private int port;
 
@@ -19,6 +20,14 @@ public class ConnectorOneConfig {
 
 	public void setPort(int port) {
 		this.port = port;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }
