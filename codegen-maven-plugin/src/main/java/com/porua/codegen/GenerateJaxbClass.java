@@ -99,13 +99,13 @@ public class GenerateJaxbClass {
 
 	private static FieldSpec.Builder getDefaultValue(FieldSpec.Builder fs, String type) throws Exception {
 		if (type.contains("int") || type.contains("Integer")) {
-			fs.initializer(CodeBlock.of("$L", 1));
+			fs.initializer(CodeBlock.of("$L", 1111));
 			return fs;
 		} else if (type.contains("String")) {
 			fs.initializer(CodeBlock.of("$S", "somevalue"));
 			return fs;
 		} else if (type.contains("float") || type.equals("Float")) {
-			fs.initializer(CodeBlock.of("$L", 1));
+			fs.initializer(CodeBlock.of("$L", 1111));
 			return fs;
 		} else {
 			return fs;
