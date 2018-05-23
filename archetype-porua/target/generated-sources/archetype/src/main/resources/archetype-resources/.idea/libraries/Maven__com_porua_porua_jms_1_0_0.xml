@@ -1,0 +1,16 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<component name="libraryTable">
+  <library name="Maven: ${package}:porua-jms:${version}">
+    <CLASSES>
+      <root url="jar://${symbol_dollar}MAVEN_REPOSITORY${symbol_dollar}/${packageInPathFormat}/porua-jms/${version}/porua-jms-${version}.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://${symbol_dollar}MAVEN_REPOSITORY${symbol_dollar}/${packageInPathFormat}/porua-jms/${version}/porua-jms-${version}-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://${symbol_dollar}MAVEN_REPOSITORY${symbol_dollar}/${packageInPathFormat}/porua-jms/${version}/porua-jms-${version}-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
