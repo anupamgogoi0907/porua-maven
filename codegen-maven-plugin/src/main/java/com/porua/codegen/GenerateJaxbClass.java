@@ -44,16 +44,19 @@ public class GenerateJaxbClass {
 			if (field.getType().isPrimitive() || field.getType().getPackage().getName().startsWith("java.lang")) {
 				asAttribute = AnnotationSpec.builder(XmlAttribute.class);
 				asAttribute.addMember("name", CodeBlock.of("$S", field.getName()));
-				fs = FieldSpec.builder(field.getType(), field.getName(), Modifier.PRIVATE).addAnnotation(asAttribute.build());
+				fs = FieldSpec.builder(field.getType(), field.getName(), Modifier.PRIVATE)
+						.addAnnotation(asAttribute.build());
 				getDefaultValue(fs, field.getType().getName());
 			} else {
 				ConnectorConfig configAnnot = field.getAnnotation(ConnectorConfig.class);
 				if (configAnnot != null) {
 					asAttribute = AnnotationSpec.builder(XmlAttribute.class);
 					asAttribute.addMember("name", CodeBlock.of("$S", configAnnot.configName()));
-					fs = FieldSpec.builder(String.class, configAnnot.configName().replaceAll("[^a-zA-Z0-9]", "")).addAnnotation(asAttribute.build());
+					fs = FieldSpec.builder(String.class, configAnnot.configName().replaceAll("[^a-zA-Z0-9]", ""))
+							.addAnnotation(asAttribute.build());
 					getDefaultValue(fs, String.class.getName());
-					createConnectorConfigJaxbClass(field.getType(), configAnnot.tagName(), connectAnnot.tagNamespace(), listClassName);
+					createConnectorConfigJaxbClass(field.getType(), configAnnot.tagName(), connectAnnot.tagNamespace(),
+							listClassName);
 				}
 			}
 			if (fs != null) {
@@ -61,7 +64,8 @@ public class GenerateJaxbClass {
 			}
 		}
 		String className = clazz.getSimpleName() + "Jaxb";
-		TypeSpec typeSpec = TypeSpec.classBuilder(className).addModifiers(Modifier.PUBLIC).addAnnotation(as.build()).addFields(listFieldSpec).build();
+		TypeSpec typeSpec = TypeSpec.classBuilder(className).addModifiers(Modifier.PUBLIC).addAnnotation(as.build())
+				.addFields(listFieldSpec).build();
 		createFile(typeSpec);
 
 		ClassName cn = ClassName.get(GenerateCode.JAXB_PACKAGE_NAME, className);
@@ -69,7 +73,8 @@ public class GenerateJaxbClass {
 		return listClassName;
 	}
 
-	private static void createConnectorConfigJaxbClass(Class<?> clazz, String name, String namespace, List<String> listClassName) throws Exception {
+	private static void createConnectorConfigJaxbClass(Class<?> clazz, String name, String namespace,
+			List<String> listClassName) throws Exception {
 		List<FieldSpec> listFieldSpec = new ArrayList<>();
 		AnnotationSpec.Builder asClass = AnnotationSpec.builder(XmlRootElement.class);
 		asClass.addMember("name", CodeBlock.of("$S", name));
@@ -78,12 +83,14 @@ public class GenerateJaxbClass {
 		for (Field field : clazz.getDeclaredFields()) {
 			AnnotationSpec.Builder asAttribute = AnnotationSpec.builder(XmlAttribute.class);
 			asAttribute.addMember("name", CodeBlock.of("$S", field.getName()));
-			FieldSpec.Builder fs = FieldSpec.builder(field.getType(), field.getName()).addAnnotation(asAttribute.build());
+			FieldSpec.Builder fs = FieldSpec.builder(field.getType(), field.getName())
+					.addAnnotation(asAttribute.build());
 			getDefaultValue(fs, field.getType().getName());
 			listFieldSpec.add(fs.build());
 		}
 		String className = clazz.getSimpleName() + "Jaxb";
-		TypeSpec typeSpec = TypeSpec.classBuilder(className).addModifiers(Modifier.PUBLIC).addFields(listFieldSpec).addAnnotation(asClass.build()).build();
+		TypeSpec typeSpec = TypeSpec.classBuilder(className).addModifiers(Modifier.PUBLIC).addFields(listFieldSpec)
+				.addAnnotation(asClass.build()).build();
 		createFile(typeSpec);
 
 		ClassName cn = ClassName.get(GenerateCode.JAXB_PACKAGE_NAME, className);
@@ -99,13 +106,16 @@ public class GenerateJaxbClass {
 
 	private static FieldSpec.Builder getDefaultValue(FieldSpec.Builder fs, String type) throws Exception {
 		if (type.contains("int") || type.contains("Integer")) {
-			fs.initializer(CodeBlock.of("$L", 1111));
+			fs.initializer(CodeBlock.of("$L", Integer.MAX_VALUE));
 			return fs;
 		} else if (type.contains("String")) {
 			fs.initializer(CodeBlock.of("$S", "somevalue"));
 			return fs;
 		} else if (type.contains("float") || type.equals("Float")) {
-			fs.initializer(CodeBlock.of("$L", 1111));
+			fs.initializer(CodeBlock.of("$L", Float.MAX_VALUE));
+			return fs;
+		} else if (type.contains("double") || type.equals("Double")) {
+			fs.initializer(CodeBlock.of("$L", Double.MAX_VALUE));
 			return fs;
 		} else {
 			return fs;
