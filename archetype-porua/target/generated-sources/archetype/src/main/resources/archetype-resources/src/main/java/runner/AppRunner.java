@@ -3,12 +3,10 @@
 #set( $symbol_escape = '\' )
 package runner;
 
-import ${package}.container.PoruaContainer;
-
 public class AppRunner {
 
 	public static void main(String[] a) throws Exception {
-		 PoruaContainer.scanSingleApp();
+		// PoruaContainer.scanSingleApp();
 	}
 
 }
