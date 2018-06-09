@@ -17,6 +17,7 @@ import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 
 import com.porua.codegen.GenerateCode;
+import com.porua.core.tag.ConfigProperty;
 import com.porua.core.tag.Connector;
 import com.porua.core.tag.ConnectorConfig;
 
@@ -65,6 +66,7 @@ public class GeneratePaletteJar {
 		String dir = GenerateCode.TARGET_PATH + "temp/";
 		add(new File(createTempFile(Connector.class, dir)), target, dir);
 		add(new File(createTempFile(ConnectorConfig.class, dir)), target, dir);
+		add(new File(createTempFile(ConfigProperty.class, dir)), target, dir);
 	}
 
 	private static void add(File source, JarOutputStream target, String dir) throws IOException {
