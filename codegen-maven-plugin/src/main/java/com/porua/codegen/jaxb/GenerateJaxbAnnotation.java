@@ -1,4 +1,4 @@
-package com.porua.codegen;
+package com.porua.codegen.jaxb;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

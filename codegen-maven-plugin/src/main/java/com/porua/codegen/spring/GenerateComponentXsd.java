@@ -1,4 +1,4 @@
-package com.porua.codegen;
+package com.porua.codegen.spring;
 
 import java.io.File;
 import java.io.StringWriter;
@@ -14,6 +14,8 @@ import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.impl.inst2xsd.Inst2Xsd;
 import org.apache.xmlbeans.impl.inst2xsd.Inst2XsdOptions;
 import org.apache.xmlbeans.impl.xb.xsdschema.SchemaDocument;
+
+import com.porua.codegen.GenerateCode;
 
 public class GenerateComponentXsd {
 

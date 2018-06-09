@@ -1,4 +1,4 @@
-package com.porua.codegen;
+package com.porua.codegen.jaxb;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -9,6 +9,7 @@ import javax.lang.model.element.Modifier;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.porua.codegen.GenerateCode;
 import com.porua.core.tag.Connector;
 import com.porua.core.tag.ConnectorConfig;
 import com.squareup.javapoet.AnnotationSpec;

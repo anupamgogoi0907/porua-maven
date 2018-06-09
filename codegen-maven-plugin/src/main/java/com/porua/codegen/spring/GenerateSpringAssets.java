@@ -1,4 +1,4 @@
-package com.porua.codegen;
+package com.porua.codegen.spring;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,6 +15,7 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 import org.w3c.dom.Element;
 
+import com.porua.codegen.GenerateCode;
 import com.porua.core.PoruaBeanDefinitionParser;
 import com.porua.core.tag.Connector;
 import com.porua.core.tag.ConnectorConfig;

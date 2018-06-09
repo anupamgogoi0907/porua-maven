@@ -1,4 +1,4 @@
-package com.porua.test;
+package com.pora.test;
 
 public class SkypeConnectorConfig {
 

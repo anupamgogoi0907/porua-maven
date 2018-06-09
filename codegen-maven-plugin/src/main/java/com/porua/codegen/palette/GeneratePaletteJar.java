@@ -1,4 +1,4 @@
-package com.porua.codegen;
+package com.porua.codegen.palette;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -16,6 +16,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 
+import com.porua.codegen.GenerateCode;
 import com.porua.core.tag.Connector;
 import com.porua.core.tag.ConnectorConfig;
 

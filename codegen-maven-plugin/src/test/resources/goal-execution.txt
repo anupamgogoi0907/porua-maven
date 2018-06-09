@@ -1,0 +1,9 @@
+#### Maven Goals ####
+mvn compile com.porua:codegen-maven-plugin:1.0.0:genjava
+mvn compile com.porua:codegen-maven-plugin:1.0.0:genxsd
+mvn compile com.porua:codegen-maven-plugin:1.0.0:genjar
+mvn compile com.porua:codegen-maven-plugin:1.0.0:genpalette
+
+
+# Remote debug
+mvnDebug compile com.porua:codegen-maven-plugin:1.0.0:genjar

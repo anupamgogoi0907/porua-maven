@@ -5,6 +5,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.porua.codegen.jaxb.GenerateJaxbClass;
+import com.porua.codegen.palette.GeneratePaletteClass;
+import com.porua.codegen.palette.GeneratePaletteJar;
+import com.porua.codegen.spring.GenerateComponentXsd;
+import com.porua.codegen.spring.GenerateSpringAssets;
+
 public class GenerateCode {
 	public static String SRC_PATH = "./src/main/java/";
 	public static String TARGET_PATH = "./target/classes/";
