@@ -1,8 +1,13 @@
 package com.pora.test;
 
+import com.porua.core.tag.ConfigProperty;
+
 public class SkypeConnectorConfig {
 
+	@ConfigProperty
 	private String login = "login";
+
+	@ConfigProperty
 	private String password = "password";
 
 	public String getLogin() {

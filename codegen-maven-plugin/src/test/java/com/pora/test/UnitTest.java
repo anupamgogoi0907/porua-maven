@@ -10,9 +10,10 @@ public class UnitTest {
 		List<String> list = new ArrayList<>();
 		list.add(SkypeConnector.class.getName());
 		list.add(MyConnector.class.getName());
-		// GenerateCode.generateJaxbAssets("com.porua.test", list,
-		// Main.class.getClassLoader());
-		GenerateCode.generateXsdAssets("com.porua.test", list, UnitTest.class.getClassLoader());
+
+		GenerateCode.generatePaletteAssets("com.porua.test.generated", list, UnitTest.class.getClassLoader());
+		// GenerateCode.generateXsdAssets("com.porua.test", list,
+		// UnitTest.class.getClassLoader());
 
 	}
 

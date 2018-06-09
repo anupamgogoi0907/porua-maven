@@ -1,14 +1,20 @@
 package com.pora.test;
 
 import com.porua.core.processor.MessageProcessor;
+import com.porua.core.tag.ConfigProperty;
 import com.porua.core.tag.Connector;
 import com.porua.core.tag.ConnectorConfig;
 
 @Connector(tagName = "skype", tagNamespace = "http://www.porua.org/skype", tagSchemaLocation = "http://www.porua.org/skype/skype.xsd", imageName = "")
 public class SkypeConnector extends MessageProcessor {
 
+	@ConfigProperty
 	private String name;
+
+	@ConfigProperty
 	private int a;
+
+	@ConfigProperty
 	private Integer b;
 
 	@ConnectorConfig(configName = "config-ref", tagName = "skype-config")
