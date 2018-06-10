@@ -36,8 +36,13 @@ public class GenerateSpringAssets {
 		createSpringFiles(listConnector.get(0));
 	}
 
+	/**
+	 * Generate bean definition java source for connector.
+	 * 
+	 * @param clazz
+	 * @throws Exception
+	 */
 	private static void createBeanDefinitionParser(Class<?> clazz) throws Exception {
-		// Connector
 		CodeBlock.Builder builder = CodeBlock.builder();
 		builder.add("builder.setScope($T.SCOPE_PROTOTYPE);", BeanDefinition.class);
 		for (Field field : clazz.getDeclaredFields()) {
@@ -54,6 +59,7 @@ public class GenerateSpringAssets {
 				builder.add(CodeBlock.of("String configRef=element.getAttribute($S);", configAnnot.configName()));
 				builder.add(CodeBlock.of("$1T configRefBean = new $2T(configRef);", RuntimeBeanReference.class, RuntimeBeanReference.class));
 				builder.add(CodeBlock.of("builder.addPropertyValue(" + "$S" + "," + "configRefBean" + ");", field.getName()));
+				createConnectorConfigBeanDefinitionParser(field.getType());
 			}
 
 		}
@@ -61,23 +67,50 @@ public class GenerateSpringAssets {
 		// Constructor
 		MethodSpec methodConstructor = MethodSpec.constructorBuilder().addModifiers(Modifier.PUBLIC).addStatement("super($T.class)", clazz).build();
 
-		// doParse
+		// doParse()
 		ParameterSpec p1 = ParameterSpec.builder(Element.class, "element").build();
 		ParameterSpec p2 = ParameterSpec.builder(BeanDefinitionBuilder.class, "builder").build();
 
 		MethodSpec methgodDoParse = MethodSpec.methodBuilder("doParse").addModifiers(Modifier.PROTECTED).returns(void.class).addParameters(Arrays.asList(p1, p2)).addCode(builder.build()).build();
 
+		// Create java file.
 		TypeSpec className = TypeSpec.classBuilder(clazz.getSimpleName() + "DefinitionParser").addModifiers(Modifier.PUBLIC).superclass(PoruaBeanDefinitionParser.class).addMethods(Arrays.asList(methodConstructor, methgodDoParse)).build();
-		JavaFile javaFile = JavaFile.builder(GenerateCode.SPRING_ASSET_PACKAGE_NAME, className).build();
-		File file = new File(GenerateCode.SRC_PATH);
-		javaFile.writeTo(System.out);
-		javaFile.writeTo(file);
+		createFile(className);
+	}
 
-		// Connector Configuration
-		Field configField = Arrays.asList(clazz.getDeclaredFields()).stream().filter(f -> f.getAnnotation(ConnectorConfig.class) != null).findFirst().orElse(null);
-		if (configField != null) {
-			createBeanDefinitionParser(configField.getType());
+	/**
+	 * Generate bean definition java source for connector configuration.
+	 * 
+	 * @param clazz
+	 * @throws Exception
+	 */
+	private static void createConnectorConfigBeanDefinitionParser(Class<?> clazz) throws Exception {
+		CodeBlock.Builder builder = CodeBlock.builder();
+		builder.add("builder.setScope($T.SCOPE_PROTOTYPE);", BeanDefinition.class);
+		for (Field field : clazz.getDeclaredFields()) {
+			ConfigProperty configPropAnnot = field.getAnnotation(ConfigProperty.class);
+
+			// Simple property.
+			if (configPropAnnot != null) {
+				builder.add(CodeBlock.of("String " + field.getName() + "= element.getAttribute($S);", field.getName()));
+				builder.add(CodeBlock.of("builder.addPropertyValue(" + "$S" + "," + field.getName() + ");", field.getName()));
+			}
+
 		}
+
+		// Constructor
+		MethodSpec methodConstructor = MethodSpec.constructorBuilder().addModifiers(Modifier.PUBLIC).addStatement("super($T.class)", clazz).build();
+
+		// doParse()
+		ParameterSpec p1 = ParameterSpec.builder(Element.class, "element").build();
+		ParameterSpec p2 = ParameterSpec.builder(BeanDefinitionBuilder.class, "builder").build();
+
+		MethodSpec methgodDoParse = MethodSpec.methodBuilder("doParse").addModifiers(Modifier.PROTECTED).returns(void.class).addParameters(Arrays.asList(p1, p2)).addCode(builder.build()).build();
+
+		// Create java file.
+		TypeSpec className = TypeSpec.classBuilder(clazz.getSimpleName() + "DefinitionParser").addModifiers(Modifier.PUBLIC).superclass(PoruaBeanDefinitionParser.class).addMethods(Arrays.asList(methodConstructor, methgodDoParse)).build();
+		createFile(className);
+
 	}
 
 	/**
@@ -102,15 +135,20 @@ public class GenerateSpringAssets {
 				builder.add("registerBeanDefinitionParser($S," + "new " + configField.getType().getSimpleName() + "DefinitionParser()" + ");", config.tagName());
 			}
 		}
+		// init()
 		MethodSpec methodInit = MethodSpec.methodBuilder("init").addModifiers(Modifier.PUBLIC).returns(void.class).addStatement(builder.build()).build();
 
+		// Create java file.
 		TypeSpec className = TypeSpec.classBuilder("NamespaceHandler").addModifiers(Modifier.PUBLIC).superclass(NamespaceHandlerSupport.class).addMethods(Arrays.asList(methodInit)).build();
-		JavaFile javaFile = JavaFile.builder(GenerateCode.SPRING_ASSET_PACKAGE_NAME, className).build();
-		File file = new File("./src/main/java");
-		javaFile.writeTo(System.out);
-		javaFile.writeTo(file);
+		createFile(className);
 	}
 
+	/**
+	 * Generate assets under META-INF for spring custom tags.
+	 * 
+	 * @param clazz
+	 * @throws Exception
+	 */
 	private static void createSpringFiles(Class<?> clazz) throws Exception {
 		Connector annotation = clazz.getAnnotation(Connector.class);
 
@@ -127,6 +165,13 @@ public class GenerateSpringAssets {
 		createFile(schemasFile, tagSchema);
 	}
 
+	/**
+	 * Create spring asset files e.g spring.handlers & spring.schemas
+	 * 
+	 * @param file
+	 * @param content
+	 * @throws Exception
+	 */
 	private static void createFile(File file, String content) throws Exception {
 		if (!file.exists()) {
 			file.createNewFile();
@@ -134,6 +179,19 @@ public class GenerateSpringAssets {
 		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 		writer.write(content);
 		writer.close();
+	}
+
+	/**
+	 * Create source java file.
+	 * 
+	 * @param className
+	 * @throws Exception
+	 */
+	private static void createFile(TypeSpec className) throws Exception {
+		JavaFile javaFile = JavaFile.builder(GenerateCode.SPRING_ASSET_PACKAGE_NAME, className).build();
+		File file = new File(GenerateCode.SRC_PATH);
+		javaFile.writeTo(System.out);
+		javaFile.writeTo(file);
 	}
 
 }

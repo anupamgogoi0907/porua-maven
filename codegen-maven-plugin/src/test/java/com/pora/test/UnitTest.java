@@ -11,7 +11,7 @@ public class UnitTest {
 		list.add(SkypeConnector.class.getName());
 		list.add(MyConnector.class.getName());
 
-		GenerateCode.generatePaletteAssets("com.porua.test.generated", list, UnitTest.class.getClassLoader());
+		GenerateCode.generateJavaAssets("com.porua.generated", list, UnitTest.class.getClassLoader());
 		// GenerateCode.generateXsdAssets("com.porua.test", list,
 		// UnitTest.class.getClassLoader());
 
