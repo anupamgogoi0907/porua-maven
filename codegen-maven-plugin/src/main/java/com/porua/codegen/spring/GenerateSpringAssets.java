@@ -17,6 +17,7 @@ import org.w3c.dom.Element;
 
 import com.porua.codegen.GenerateCode;
 import com.porua.core.PoruaBeanDefinitionParser;
+import com.porua.core.tag.ConfigProperty;
 import com.porua.core.tag.Connector;
 import com.porua.core.tag.ConnectorConfig;
 import com.squareup.javapoet.CodeBlock;
@@ -40,17 +41,21 @@ public class GenerateSpringAssets {
 		CodeBlock.Builder builder = CodeBlock.builder();
 		builder.add("builder.setScope($T.SCOPE_PROTOTYPE);", BeanDefinition.class);
 		for (Field field : clazz.getDeclaredFields()) {
-			if (field.getType().isPrimitive() || field.getType().getPackage().getName().startsWith("java.lang")) {
+			ConfigProperty configPropAnnot = field.getAnnotation(ConfigProperty.class);
+			ConnectorConfig configAnnot = field.getAnnotation(ConnectorConfig.class);
+
+			// Simple property.
+			if (configPropAnnot != null) {
 				builder.add(CodeBlock.of("String " + field.getName() + "= element.getAttribute($S);", field.getName()));
 				builder.add(CodeBlock.of("builder.addPropertyValue(" + "$S" + "," + field.getName() + ");", field.getName()));
-			} else {
-				ConnectorConfig annotation = field.getAnnotation(ConnectorConfig.class);
-				if (annotation != null) {
-					builder.add(CodeBlock.of("String configRef=element.getAttribute($S);", annotation.configName()));
-					builder.add(CodeBlock.of("$1T configRefBean = new $2T(configRef);", RuntimeBeanReference.class, RuntimeBeanReference.class));
-					builder.add(CodeBlock.of("builder.addPropertyValue(" + "$S" + "," + "configRefBean" + ");", field.getName()));
-				}
 			}
+			// Separate configuration class.
+			if (configAnnot != null) {
+				builder.add(CodeBlock.of("String configRef=element.getAttribute($S);", configAnnot.configName()));
+				builder.add(CodeBlock.of("$1T configRefBean = new $2T(configRef);", RuntimeBeanReference.class, RuntimeBeanReference.class));
+				builder.add(CodeBlock.of("builder.addPropertyValue(" + "$S" + "," + "configRefBean" + ");", field.getName()));
+			}
+
 		}
 
 		// Constructor
