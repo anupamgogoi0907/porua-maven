@@ -10,6 +10,10 @@ import com.porua.codegen.jaxb.GenerateJaxbClass;
 import com.porua.codegen.palette.GeneratePaletteClass;
 import com.porua.codegen.palette.GeneratePaletteJar;
 import com.porua.codegen.spring.GenerateSpringAssets;
+import com.porua.mojo.GenJarMojo;
+import com.porua.mojo.GenJavaMojo;
+import com.porua.mojo.GenPaletteMojo;
+import com.porua.mojo.GenXsdMojo;
 
 public class GenerateCode {
 	public static String SRC_PATH = "./src/main/java/";
@@ -28,7 +32,15 @@ public class GenerateCode {
 	public static String JAXB_PACKAGE_NAME;
 	public static String JAXB_PACKAGE_PATH;
 
-	// genjava
+	/**
+	 * Generate all assets. Java sources,spring.handlers,spring.schemas.
+	 * {@link GenJavaMojo}
+	 * 
+	 * @param pkg
+	 * @param connectors
+	 * @param loader
+	 * @throws Exception
+	 */
 	public static void generateJavaAssets(String pkg, List<String> connectors, ClassLoader loader) throws Exception {
 		configure(pkg);
 		List<Class<?>> listConnector = loadConnectorClasses(connectors, loader);
@@ -37,28 +49,54 @@ public class GenerateCode {
 		GenerateJaxbClass.generateJaxbAssets(listConnector);
 	}
 
-	// genpalette
+	/**
+	 * Generate Palette Java sources. {@link GenPaletteMojo}
+	 * 
+	 * @param pkg
+	 * @param connectors
+	 * @param loader
+	 * @throws Exception
+	 */
 	public static void generatePaletteAssets(String pkg, List<String> connectors, ClassLoader loader) throws Exception {
 		configure(pkg);
 		List<Class<?>> listConnector = loadConnectorClasses(connectors, loader);
 		GeneratePaletteClass.generatePaletteAssets(listConnector);
 	}
 
-	// genxsd
+	/**
+	 * Generate XSD. {@link GenXsdMojo}
+	 * 
+	 * @param pkg
+	 * @param connectors
+	 * @param loader
+	 * @throws Exception
+	 */
 	public static void generateXsdAssets(String pkg, List<String> connectors, ClassLoader loader) throws Exception {
 		configure(pkg);
 		GenerateComponentXsd.generateXsdAssets(loader);
 
 	}
 
-	// genpalettejar
+	/**
+	 * Generate palette jar. {@link GenJarMojo}
+	 * 
+	 * @param pkg
+	 * @param jarName
+	 * @param connectors
+	 * @param loader
+	 * @throws Exception
+	 */
 	public static void generatePaletteAssetsJar(String pkg, String jarName, List<String> connectors, ClassLoader loader) throws Exception {
 		configure(pkg);
-		List<Class<?>> listConnector = loadConnectorClasses(connectors, loader);
-		GeneratePaletteClass.generatePaletteAssets(listConnector);
 		GeneratePaletteJar.generatePaletteAssetsJar(jarName);
 	}
 
+	/**
+	 * Configure names, paths etc.
+	 * 
+	 * @param pkg
+	 * @throws Exception
+	 */
 	public static void configure(String pkg) throws Exception {
 		Files.createDirectories(Paths.get(META_INF_DIR));
 		SPRING_ASSET_PACKAGE_NAME = pkg.concat(".").concat("spring");
@@ -72,6 +110,14 @@ public class GenerateCode {
 
 	}
 
+	/**
+	 * Load connector classes based on their names.
+	 * 
+	 * @param connectors
+	 * @param loader
+	 * @return
+	 * @throws Exception
+	 */
 	private static List<Class<?>> loadConnectorClasses(List<String> connectors, ClassLoader loader) throws Exception {
 		List<Class<?>> listConnector = new ArrayList<>();
 		for (String className : connectors) {
