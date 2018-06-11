@@ -10,7 +10,7 @@ import com.porua.codegen.jaxb.GenerateJaxbClass;
 import com.porua.codegen.palette.GeneratePaletteClass;
 import com.porua.codegen.palette.GeneratePaletteJar;
 import com.porua.codegen.spring.GenerateSpringAssets;
-import com.porua.mojo.GenJarMojo;
+import com.porua.mojo.GenPaletteJarMojo;
 import com.porua.mojo.GenJavaMojo;
 import com.porua.mojo.GenPaletteMojo;
 import com.porua.mojo.GenXsdMojo;
@@ -78,7 +78,7 @@ public class GenerateCode {
 	}
 
 	/**
-	 * Generate palette jar. {@link GenJarMojo}
+	 * Generate palette jar. {@link GenPaletteJarMojo}
 	 * 
 	 * @param pkg
 	 * @param jarName
