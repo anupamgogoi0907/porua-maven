@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pora.test.connector.MyConnector;
-import com.pora.test.connector.SkypeConnector;
 import com.porua.codegen.GenerateCode;
 
 public class UnitTest {
