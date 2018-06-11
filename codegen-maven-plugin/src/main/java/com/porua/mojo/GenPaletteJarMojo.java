@@ -14,7 +14,7 @@ import com.porua.codegen.GenerateCode;
 import com.porua.utility.MojoUtility;
 
 @Mojo(name = "genjar")
-public class GenJarMojo extends AbstractMojo {
+public class GenPaletteJarMojo extends AbstractMojo {
 
 	@Parameter(name = "pkg", defaultValue = "generated", required = true)
 	private String pkg;

@@ -7,8 +7,15 @@ import com.porua.core.tag.Connector;
 @Connector(tagName = "my", tagNamespace = "http://www.porua.org/skype", tagSchemaLocation = "http://www.porua.org/skype/skype.xsd", imageName = "")
 public class MyConnector extends MessageProcessor {
 
+	enum METHODS {
+		GET, POST
+	}
+
 	@ConfigProperty
 	private String name;
+
+	@ConfigProperty(enumClass = METHODS.class)
+	private String method;
 
 	public String getName() {
 		return name;
