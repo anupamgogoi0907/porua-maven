@@ -32,6 +32,12 @@ public class GeneratePaletteClass {
 		});
 	}
 
+	/**
+	 * Generate Java source file for connector palette.
+	 * 
+	 * @param clazz
+	 * @throws Exception
+	 */
 	private static void createConnectorPalette(Class<?> clazz) throws Exception {
 		Connector connectAnnot = clazz.getAnnotation(Connector.class);
 
@@ -68,11 +74,17 @@ public class GeneratePaletteClass {
 			}
 		}
 
-		TypeSpec typeSpec = TypeSpec.classBuilder(clazz.getSimpleName() + "Palette").addModifiers(Modifier.PUBLIC)
-				.addAnnotation(as.build()).addFields(listFields).build();
+		TypeSpec typeSpec = TypeSpec.classBuilder(clazz.getSimpleName() + "Palette").addModifiers(Modifier.PUBLIC).addAnnotation(as.build()).addFields(listFields).build();
 		createFile(typeSpec);
 	}
 
+	/**
+	 * Generate Java source file connector configuration.
+	 * 
+	 * @param clazz
+	 * @return
+	 * @throws Exception
+	 */
 	private static TypeName createConnectorConfigPalette(Class<?> clazz) throws Exception {
 		List<FieldSpec> listField = new ArrayList<>();
 		Arrays.asList(clazz.getDeclaredFields()).forEach(f -> {
@@ -90,6 +102,12 @@ public class GeneratePaletteClass {
 		return cn.box();
 	}
 
+	/**
+	 * Create file.
+	 * 
+	 * @param className
+	 * @throws Exception
+	 */
 	private static void createFile(TypeSpec className) throws Exception {
 		JavaFile javaFile = JavaFile.builder(GenerateCode.PALETTE_PACKAGE_NAME, className).build();
 		File file = new File(GenerateCode.SRC_PATH);
