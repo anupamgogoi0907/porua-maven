@@ -1,4 +1,4 @@
-package com.pora.test;
+package com.pora.test.connector;
 
 import com.porua.core.processor.MessageProcessor;
 import com.porua.core.tag.ConfigProperty;
