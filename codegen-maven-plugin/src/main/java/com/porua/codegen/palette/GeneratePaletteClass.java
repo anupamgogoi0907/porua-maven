@@ -4,7 +4,9 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.lang.model.element.Modifier;
 
@@ -48,8 +50,10 @@ public class GeneratePaletteClass {
 		as.addMember("tagSchemaLocation", CodeBlock.of("$S", connectAnnot.tagSchemaLocation()));
 		as.addMember("imageName", CodeBlock.of("$S", connectAnnot.imageName()));
 
-		// Fields
+		// Enum & Fields
+		List<TypeSpec> listEnum = new ArrayList<>();
 		List<FieldSpec> listFields = new ArrayList<>();
+
 		for (Field field : clazz.getDeclaredFields()) {
 			FieldSpec fs = null;
 			ConfigProperty configPropAnnot = field.getAnnotation(ConfigProperty.class);
@@ -57,7 +61,13 @@ public class GeneratePaletteClass {
 
 			// Simple property.
 			if (configPropAnnot != null) {
-				fs = FieldSpec.builder(field.getType(), field.getName()).build();
+				if (configPropAnnot.enumClass() == Void.class) {
+					fs = FieldSpec.builder(field.getType(), field.getName()).addAnnotation(ConfigProperty.class).build();
+				} else {
+					Map<FieldSpec, TypeSpec> map = createEnum(field, configPropAnnot.enumClass());
+					listFields.add(map.keySet().iterator().next());
+					listEnum.add(map.values().iterator().next());
+				}
 			}
 			// Separate configuration class.
 			if (configAnnot != null) {
@@ -74,7 +84,8 @@ public class GeneratePaletteClass {
 			}
 		}
 
-		TypeSpec typeSpec = TypeSpec.classBuilder(clazz.getSimpleName() + "Palette").addModifiers(Modifier.PUBLIC).addAnnotation(as.build()).addFields(listFields).build();
+		String className = clazz.getSimpleName() + "Palette";
+		TypeSpec typeSpec = TypeSpec.classBuilder(className).addModifiers(Modifier.PUBLIC).addAnnotation(as.build()).addTypes(listEnum).addFields(listFields).build();
 		createFile(typeSpec);
 	}
 
@@ -86,20 +97,64 @@ public class GeneratePaletteClass {
 	 * @throws Exception
 	 */
 	private static TypeName createConnectorConfigPalette(Class<?> clazz) throws Exception {
+		List<TypeSpec> listEnum = new ArrayList<>();
 		List<FieldSpec> listField = new ArrayList<>();
+
+		// Simple property.
 		Arrays.asList(clazz.getDeclaredFields()).forEach(f -> {
-			ConfigProperty configPropAnnot = f.getAnnotation(ConfigProperty.class);
-			if (configPropAnnot != null) {
-				FieldSpec fs = FieldSpec.builder(f.getType(), f.getName()).build();
-				listField.add(fs);
+			try {
+				ConfigProperty configPropAnnot = f.getAnnotation(ConfigProperty.class);
+				if (configPropAnnot != null) {
+					if (configPropAnnot.enumClass() == Void.class) {
+						FieldSpec fs = FieldSpec.builder(f.getType(), f.getName()).addAnnotation(ConfigProperty.class).build();
+						listField.add(fs);
+					} else {
+						Map<FieldSpec, TypeSpec> map = createEnum(f, configPropAnnot.enumClass());
+						listField.add(map.keySet().iterator().next());
+						listEnum.add(map.values().iterator().next());
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
+
 		});
 
 		String className = clazz.getSimpleName() + "Palette";
-		TypeSpec typeSpec = TypeSpec.classBuilder(className).addModifiers(Modifier.PUBLIC).addFields(listField).build();
+		TypeSpec typeSpec = TypeSpec.classBuilder(className).addModifiers(Modifier.PUBLIC).addTypes(listEnum).addFields(listField).build();
 		createFile(typeSpec);
 		ClassName cn = ClassName.get(GenerateCode.PALETTE_PACKAGE_NAME, className);
 		return cn.box();
+	}
+
+	/**
+	 * Generate Enum .
+	 * 
+	 * @param fieldEnum
+	 * @param classEnum
+	 * @return
+	 * @throws Exception
+	 */
+	private static Map<FieldSpec, TypeSpec> createEnum(Field fieldEnum, Class<?> classEnum) throws Exception {
+		String enumName = classEnum.getSimpleName();
+
+		// Enum
+		TypeSpec.Builder tsb = TypeSpec.enumBuilder(enumName);
+		for (Object v : classEnum.getEnumConstants()) {
+			Enum<?> e = (Enum<?>) v;
+			tsb.addEnumConstant(e.name());
+			tsb.addEnumConstant(e.name());
+		}
+
+		// Field
+		ClassName cn = ClassName.get("", enumName);
+		AnnotationSpec.Builder asFieldAttribute = AnnotationSpec.builder(ConfigProperty.class);
+		asFieldAttribute.addMember("enumClass", CodeBlock.of("$T.class", cn.box()));
+		FieldSpec.Builder fsb = FieldSpec.builder(fieldEnum.getType(), fieldEnum.getName(), Modifier.PRIVATE).addAnnotation(asFieldAttribute.build());
+
+		Map<FieldSpec, TypeSpec> result = new HashMap<>();
+		result.put(fsb.build(), tsb.build());
+		return result;
 	}
 
 	/**
