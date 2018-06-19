@@ -50,9 +50,7 @@
 	<classpathentry kind="var" path="M2_REPO/org/apache/commons/commons-pool2/2.5.0/commons-pool2-2.5.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/commons-logging/commons-logging/1.2/commons-logging-1.2.jar"/>
 	<classpathentry kind="var" path="M2_REPO/commons-io/commons-io/2.6/commons-io-2.6.jar"/>
-	<classpathentry kind="var" path="M2_REPO/com/porua/porua-db/1.0.0/porua-db-1.0.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/com/porua/porua-http/1.0.0/porua-http-1.0.0.jar"/>
-	<classpathentry kind="var" path="M2_REPO/com/porua/porua-jms/1.0.0/porua-jms-1.0.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/com/h2database/h2/1.4.196/h2-1.4.196.jar"/>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
