@@ -12,11 +12,6 @@
 			<version>1.0.0</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>1.4.196</version>
-		</dependency>
 	</dependencies>
 	<build>
 		<resources>
@@ -38,18 +33,17 @@
 				<version>3.1.0</version>
 				<executions>
 					<execution>
-						<id>make-fat-jar</id>
+						<id>fat-jar</id>
 						<phase>package</phase>
 						<goals>
 							<goal>single</goal>
 						</goals>
 						<configuration>
-							<descriptorRefs>
-								<descriptorRef>jar-with-dependencies</descriptorRef>
-							</descriptorRefs>
-							<finalName>app-${project.artifactId}-${project.version}</finalName>
+							<descriptors>
+								<descriptor>src/assembly/assembly.xml</descriptor>
+							</descriptors>
+							<finalName>${project.artifactId}-${project.version}</finalName>
 							<outputDirectory>./</outputDirectory>
-							<appendAssemblyId>false</appendAssemblyId>
 						</configuration>
 					</execution>
 				</executions>
