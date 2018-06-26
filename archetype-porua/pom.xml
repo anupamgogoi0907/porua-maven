@@ -19,6 +19,9 @@
 			<resource>
 				<directory>src/main/app</directory>
 			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
 		</resources>
 		<plugins>
 			<plugin>
